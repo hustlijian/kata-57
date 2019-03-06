@@ -17,6 +17,10 @@ func getFloat64(reader *bufio.Reader, prompt string) (float64, error) {
 	if err != nil {
 		number, err = getFloat64(reader, prompt)
 	}
+	if number < 0 {
+		fmt.Println("please input a positive number")
+		number, err = getFloat64(reader, prompt)
+	}
 	return number, err
 }
 
@@ -26,8 +30,8 @@ func main() {
 	var tipRate float64 = 0
 	var total float64 = 0
 	reader := bufio.NewReader(os.Stdin)
-	billAmount, err1 := getFloat64(reader, "What is the bill? ")
-	tipRate, err2 := getFloat64(reader, "What is the tip percentage? ")
+	billAmount, _ = getFloat64(reader, "What is the bill? ")
+	tipRate, _ = getFloat64(reader, "What is the tip percentage? ")
 	tip = math.Ceil(billAmount*tipRate) / 100
 	total = billAmount + tip
 	fmt.Printf("The tip is $%.2f\n", tip)
