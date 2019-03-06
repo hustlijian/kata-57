@@ -14,6 +14,9 @@ func getFloat64(reader *bufio.Reader, prompt string) (float64, error) {
 	text, _ := reader.ReadString('\n')
 	text = strings.TrimSpace(text)
 	number, err := strconv.ParseFloat(text, 64)
+	if err != nil {
+		number, err = getFloat64(reader, prompt)
+	}
 	return number, err
 }
 
@@ -25,10 +28,6 @@ func main() {
 	reader := bufio.NewReader(os.Stdin)
 	billAmount, err1 := getFloat64(reader, "What is the bill? ")
 	tipRate, err2 := getFloat64(reader, "What is the tip percentage? ")
-	if err1 != nil || err2 != nil {
-		fmt.Printf("please input number\n")
-		return
-	}
 	tip = math.Ceil(billAmount*tipRate) / 100
 	total = billAmount + tip
 	fmt.Printf("The tip is $%.2f\n", tip)
